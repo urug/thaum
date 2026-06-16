@@ -1,0 +1,105 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/OneClassPerFile:
+  Exclude:
+    - "examples/**/*"
+    - "test/**/*"
+
+Naming/MethodParameterName:
+  MinNameLength: 1
+
+# Several dispatch helpers return boolean (auto-dirty) AND have side effects.
+# Treating them as predicates would mislead — they aren't pure queries.
+Naming/PredicateMethod:
+  Enabled: false
+
+# set_initial_focus is a deliberate framework-internal seeder, not an attr writer.
+Naming/AccessorMethodName:
+  Exclude:
+    - "lib/thaum/app.rb"
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 200
+  Exclude:
+    - "test/**/*"
+
+Metrics/ModuleLength:
+  Max: 250
+  Exclude:
+    - "lib/thaum/themes.rb"
+
+Layout/HashAlignment:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Exclude:
+    - "lib/thaum/themes.rb"
+
+Style/FormatStringToken:
+  Exclude:
+    - "lib/thaum/themes.rb"
+
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+  Exclude:
+    - "lib/thaum/rendering/canvas.rb"
+    - "lib/thaum/run_loop.rb"
+
+Metrics/MethodLength:
+  Max: 16
+  Exclude:
+    - "lib/thaum/rendering/**/*"
+    - "lib/thaum/escape_parser.rb"
+    - "lib/thaum/run_loop.rb"
+    - "lib/thaum/dispatch.rb"
+    - "lib/thaum/concerns/**/*"
+    - "lib/thaum/sigils/**/*"
+    - "test/**/*"
+    - "examples/**/*"
+
+Metrics/AbcSize:
+  Exclude:
+    - "lib/thaum/rendering/**/*"
+    - "lib/thaum/escape_parser.rb"
+    - "lib/thaum/run_loop.rb"
+    - "lib/thaum/dispatch.rb"
+    - "lib/thaum/painter.rb"
+    - "lib/thaum/themes.rb"
+    - "lib/thaum/concerns/**/*"
+    - "lib/thaum/sigils/**/*"
+    - "test/**/*"
+    - "examples/**/*"
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - "lib/thaum/rendering/**/*"
+    - "lib/thaum/escape_parser.rb"
+    - "lib/thaum/run_loop.rb"
+    - "lib/thaum/dispatch.rb"
+    - "lib/thaum/painter.rb"
+    - "lib/thaum/concerns/**/*"
+    - "lib/thaum/sigils/**/*"
+    - "examples/**/*"
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - "lib/thaum/rendering/**/*"
+    - "lib/thaum/escape_parser.rb"
+    - "lib/thaum/run_loop.rb"
+    - "lib/thaum/dispatch.rb"
+    - "lib/thaum/painter.rb"
+    - "lib/thaum/concerns/**/*"
