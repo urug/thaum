@@ -29,6 +29,20 @@ class TestColor < Minitest::Test
     assert_equal :none, Thaum::Color.detect({})
   end
 
+  def test_detect_none_when_no_color_set_overrides_truecolor
+    assert_equal :none,
+                 Thaum::Color.detect("NO_COLOR" => "1", "COLORTERM" => "truecolor", "TERM" => "xterm")
+  end
+
+  def test_detect_ignores_empty_no_color
+    assert_equal :truecolor,
+                 Thaum::Color.detect("NO_COLOR" => "", "COLORTERM" => "truecolor", "TERM" => "xterm")
+  end
+
+  def test_detect_unaffected_when_no_color_absent
+    assert_equal :truecolor, Thaum::Color.detect("COLORTERM" => "truecolor", "TERM" => "xterm")
+  end
+
   # --- to_escape: truecolor capability ---
 
   def test_hex_on_truecolor_emits_truecolor_escape
