@@ -68,6 +68,12 @@ class TestAction < Minitest::Test
     refute_equal seen[0], seen[1], "actions should not share instances across calls"
   end
 
+  def test_class_method_outside_running_app_raises_clear_error
+    Thaum::Action.pool = nil
+    error = assert_raises(Thaum::Error) { Fetcher.fetch(21) }
+    assert_match(/outside a running/, error.message)
+  end
+
   def test_emit_with_no_queue_set_is_noop
     Thaum::Action.queue = nil
     # Should not raise
