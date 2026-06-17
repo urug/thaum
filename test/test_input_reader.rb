@@ -94,6 +94,25 @@ class TestInputReader < Minitest::Test
     refute @reader.alive?
   end
 
+  def test_stop_returns_quickly_when_blocked_on_read
+    # Reader thread blocks in readpartial on an empty pipe with no incoming data.
+    # stop must interrupt the blocked read rather than wait out the join timeout.
+    read_io, write_io = IO.pipe
+    @reader = Thaum::InputReader.new(input: read_io, queue: @queue)
+    @reader.start
+    sleep 0.05 # let the thread enter the blocking read
+
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    @reader.stop
+    elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+
+    assert_operator elapsed, :<, 0.2, "stop should return quickly, took #{elapsed}s"
+    refute @reader.alive?
+  ensure
+    read_io&.close
+    write_io&.close
+  end
+
   def test_bracketed_paste_split_across_chunks_emits_one_event
     # "\e[200~hel" in chunk 1, "lo\e[201~" in chunk 2 — the stateful parser
     # must accumulate across reads and emit one PasteEvent at the end.

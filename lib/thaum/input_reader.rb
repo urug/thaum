@@ -17,7 +17,13 @@ module Thaum
     end
 
     def stop
-      @thread&.join(1)
+      return unless @thread
+
+      # Give the thread a moment to finish on its own (e.g. input already closed).
+      # If it's still blocked in readpartial, interrupt it so stop doesn't wait out
+      # the full join timeout (~1s) on every quit.
+      @thread.kill unless @thread.join(0.1)
+      @thread.join(1)
       @thread = nil
     end
 
