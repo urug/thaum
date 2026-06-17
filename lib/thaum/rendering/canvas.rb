@@ -135,7 +135,7 @@ module Thaum
           row_y = y + dy
           break if row_y >= @rect.height
 
-          bx = align_offset(line: line, available_width: @rect.width, align: align, x: x)
+          bx = align_offset(line: line, available_width: @rect.width - x, align: align, x: x)
           line.each_char do |char|
             w = char.display_width
             break if bx + w > right_edge
@@ -186,9 +186,11 @@ module Thaum
       end
 
       def align_offset(line:, available_width:, align:, x:)
+        # Origin of the content area is @rect.x + x; alignment is relative to
+        # available_width (the offset content area), so center/right add x too.
         case align
-        when :center then @rect.x + [(available_width - line.display_width) / 2, 0].max
-        when :right  then @rect.x + [available_width - line.display_width, 0].max
+        when :center then @rect.x + x + [(available_width - line.display_width) / 2, 0].max
+        when :right  then @rect.x + x + [available_width - line.display_width, 0].max
         else              @rect.x + x # :left
         end
       end
