@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - `InputReader#stop` no longer blocks ~1s on quit; the reader thread is interrupted instead of left to time out.
+- Escape sequences split across read boundaries are now coalesced instead of being mis-parsed as a stray Escape plus garbage keys. `InputReader#read_chunk` now extends the read whenever a chunk ends mid-sequence (CSI/SS3/SGR-mouse or a bare ESC), bounded by a timeout and an extend cap.
 
 ### Added
 

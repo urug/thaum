@@ -113,6 +113,76 @@ class TestInputReader < Minitest::Test
     write_io&.close
   end
 
+  def test_csi_sequence_split_mid_body_across_chunks_emits_one_event
+    # The chunk boundary falls inside the CSI body: "\e[1;5" then "H".
+    # Without coalescing, the parser would see an incomplete CSI (stray
+    # :escape) followed by mis-parsed ground keys. read_chunk must extend
+    # the read because the first chunk ends mid-sequence.
+    @reader = Thaum::InputReader.new(input: FakeIO.new("\e[1;5", "H"), queue: @queue)
+    @reader.start
+    @reader.stop
+    assert_equal [Thaum::KeyEvent.new(key: :home, ctrl: true)], drain
+  end
+
+  def test_ss3_sequence_split_across_chunks_emits_one_event
+    # "\eO" then "P" — SS3 needs one more byte after \eO to terminate.
+    @reader = Thaum::InputReader.new(input: FakeIO.new("\eO", "P"), queue: @queue)
+    @reader.start
+    @reader.stop
+    assert_equal [Thaum::KeyEvent.new(key: :f1)], drain
+  end
+
+  def test_sgr_mouse_sequence_split_across_chunks_emits_one_event
+    # "\e[<0;10;5" then "M" — SGR mouse terminates on M/m.
+    @reader = Thaum::InputReader.new(input: FakeIO.new("\e[<0;10;5", "M"), queue: @queue)
+    @reader.start
+    @reader.stop
+    assert_equal(
+      [Thaum::MouseEvent.new(button: :left, action: :press, abs_x: 9, abs_y: 4)],
+      drain
+    )
+  end
+
+  def test_real_pipe_csi_split_across_reads_emits_one_event
+    # Real IO.pipe: write the head of a CSI sequence, let the reader consume
+    # it and start its extend-wait, then deliver the final byte. The reader
+    # must coalesce them into a single KeyEvent rather than :escape + garbage.
+    r, w = IO.pipe
+    @reader = Thaum::InputReader.new(input: r, queue: @queue)
+    @reader.start
+    w.write("\e[1;5")
+    sleep 0.01 # let the reader hit its wait_readable extend loop
+    w.write("H")
+    w.close # EOF unblocks the reader thread so stop can join it
+    @reader.stop
+    r.close
+    assert_equal [Thaum::KeyEvent.new(key: :home, ctrl: true)], drain
+  end
+
+  def test_real_pipe_bare_escape_resolves_to_escape
+    # A genuine bare ESC keypress: nothing else follows, so the extend loop's
+    # wait_readable must time out and yield a single :escape.
+    r, w = IO.pipe
+    @reader = Thaum::InputReader.new(input: r, queue: @queue)
+    @reader.start
+    w.write("\e")
+    sleep Thaum::InputReader::ESCAPE_TIMEOUT * 3 # outlast the extend timeout
+    w.close
+    @reader.stop
+    r.close
+    assert_equal [Thaum::KeyEvent.new(key: :escape)], drain
+  end
+
+  def test_bracketed_paste_end_marker_split_across_chunks_emits_one_event
+    # The closing \e[201~ marker is split: "...lo\e[20" then "1~". The marker
+    # head ends mid-CSI, so read_chunk extends and the parser sees a complete
+    # terminator instead of swallowing the partial marker into the paste body.
+    @reader = Thaum::InputReader.new(input: FakeIO.new("\e[200~hel", "lo\e[20", "1~"), queue: @queue)
+    @reader.start
+    @reader.stop
+    assert_equal [Thaum::PasteEvent.new(text: "hello")], drain
+  end
+
   def test_bracketed_paste_split_across_chunks_emits_one_event
     # "\e[200~hel" in chunk 1, "lo\e[201~" in chunk 2 — the stateful parser
     # must accumulate across reads and emit one PasteEvent at the end.
