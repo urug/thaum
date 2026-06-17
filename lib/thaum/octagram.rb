@@ -9,7 +9,7 @@ module Thaum
   #
   # See DECISIONS.md (2026-06-02) for the naming rationale.
   module Octagram
-    include Concerns::Layout
+    include Layout
 
     attr_accessor :thaum_app, :handler_parent
 

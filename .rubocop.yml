@@ -67,6 +67,7 @@ Metrics/MethodLength:
     - "lib/thaum/run_loop.rb"
     - "lib/thaum/dispatch.rb"
     - "lib/thaum/concerns/**/*"
+    - "lib/thaum/layout.rb"
     - "lib/thaum/sigils/**/*"
     - "test/**/*"
     - "examples/**/*"
@@ -80,6 +81,7 @@ Metrics/AbcSize:
     - "lib/thaum/painter.rb"
     - "lib/thaum/themes.rb"
     - "lib/thaum/concerns/**/*"
+    - "lib/thaum/layout.rb"
     - "lib/thaum/sigils/**/*"
     - "test/**/*"
     - "examples/**/*"
@@ -92,6 +94,7 @@ Metrics/CyclomaticComplexity:
     - "lib/thaum/dispatch.rb"
     - "lib/thaum/painter.rb"
     - "lib/thaum/concerns/**/*"
+    - "lib/thaum/layout.rb"
     - "lib/thaum/sigils/**/*"
     - "examples/**/*"
 
@@ -103,3 +106,4 @@ Metrics/PerceivedComplexity:
     - "lib/thaum/dispatch.rb"
     - "lib/thaum/painter.rb"
     - "lib/thaum/concerns/**/*"
+    - "lib/thaum/layout.rb"
