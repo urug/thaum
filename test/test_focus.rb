@@ -22,7 +22,7 @@ class TestFocus < Minitest::Test
 
   # A nested Layout class — lets us cover Layout subclass behavior
   class Pane
-    include Thaum::Concerns::Layout
+    include Thaum::Layout
 
     def initialize(sigils)
       @sigils = sigils

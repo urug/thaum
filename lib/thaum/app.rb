@@ -2,7 +2,7 @@
 
 module Thaum
   module App
-    include Concerns::Layout
+    include Layout
     include Concerns::Focus
     include Concerns::ContextUpdate
     include Concerns::Modal
