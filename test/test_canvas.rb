@@ -219,6 +219,17 @@ class TestCanvas < Minitest::Test
     assert_equal "",  @buf.cell(x: 19, y: 0).char
   end
 
+  def test_centered_wrapped_text_at_x_offset_aligns_to_offset_content_area
+    # Canvas width 20, drawn at x=4 → content area is [4, 20), width 16.
+    # "foo bar baz qux quux" wraps to "foo bar baz qux" (15) then "quux" (4).
+    # The short "quux" line must center within the offset content area:
+    #   4 + (16 - 4) / 2 = 10  (NOT 8, which is centering against full width).
+    @canvas.text(content: "foo bar baz qux quux", x: 4, y: 0, align: :center, wrap: :word)
+    assert_equal "q", @buf.cell(x: 10, y: 1).char
+    assert_equal "x", @buf.cell(x: 13, y: 1).char
+    assert_equal " ", @buf.cell(x: 8, y: 1).char
+  end
+
   def test_measure_reports_display_width
     result = @canvas.measure(content: "日本語")
     assert_equal 6, result[:width]
