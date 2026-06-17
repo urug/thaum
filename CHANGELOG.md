@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `InputReader#stop` no longer blocks ~1s on quit; the reader thread is interrupted instead of left to time out.
 
+### Added
+
+- Honor the `NO_COLOR` environment variable — when set and non-empty, color output is disabled.
+
 ### Changed
 
 - Moved `Thaum::Concerns::Layout` back to `Thaum::Layout`. Includes in `App`, `Octagram`, and downstream code should reference the top-level module.

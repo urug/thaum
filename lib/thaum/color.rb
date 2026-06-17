@@ -28,6 +28,8 @@ module Thaum
     }.freeze
 
     def self.detect(env)
+      return :none if no_color?(env)
+
       colorterm = env["COLORTERM"]
       term      = env["TERM"]
       return :truecolor if %w[truecolor 24bit].include?(colorterm)
@@ -35,6 +37,11 @@ module Thaum
       return :"256"     if term.include?("256color")
 
       :ansi
+    end
+
+    def self.no_color?(env)
+      value = env["NO_COLOR"]
+      !value.nil? && !value.empty?
     end
 
     def self.to_escape(color, capability:, base:)
@@ -92,6 +99,6 @@ module Thaum
       end.first
     end
 
-    private_class_method :named_escape, :hex_escape, :hex_to_256, :hex_to_ansi # rubocop:disable Naming/VariableNumber
+    private_class_method :no_color?, :named_escape, :hex_escape, :hex_to_256, :hex_to_ansi # rubocop:disable Naming/VariableNumber
   end
 end
