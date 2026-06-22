@@ -89,6 +89,8 @@ bundle exec ruby examples/octagram_picker.rb # picker packaged as an Octagram
 
 Per-sigil demos: `text.rb`, `select.rb`, `checkbox.rb`, `tabs.rb`, `spinner.rb`, `progress_bar.rb`, `scroll_view.rb`, `table.rb`.
 
+The `Thaum.log` dev log console (`examples/log_reader.rb` + `examples/log_generator.rb`) is documented in [docs/logging.md](docs/logging.md).
+
 ## Snapshot testing
 
 ```ruby

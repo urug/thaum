@@ -14,8 +14,9 @@ module Thaum
       raise Thaum::EmitFromUpdateError, "emit called from on_update" if app.in_on_update
 
       if event.is_a?(Thaum::TickEvent) || event.is_a?(Thaum::ResizeEvent)
-        warn "[Thaum] dropping #{event.class} from #{self.class}: " \
-             "framework-internal events cannot be emitted from Sigils or Actions"
+        Thaum.warn_internal("dropping #{event.class} from #{self.class}: " \
+                            "framework-internal events cannot be emitted from Sigils or Actions",
+                            level: :warn)
         return
       end
 

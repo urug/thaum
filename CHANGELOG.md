@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Dev log console — `Thaum.log` writes a debug side channel to a file (`Thaum.run(app, log: path)`), so you can log without corrupting the TUI (stdout is the UI). Logger-style API (`debug`/`info`/`warn`/`error`, lazy block form, exception formatting); off by default; truncates on open. While a log is active, framework-internal warnings route to it instead of stderr — `safe_invoke` handler exceptions at ERROR, emit-guard warnings at WARN. Companion examples `log_reader.rb` (tails and colorizes the file live) and `log_generator.rb`. See `docs/logging.md`.
+
 ## [0.2.1] - 2026-06-17
 
 ### Fixed

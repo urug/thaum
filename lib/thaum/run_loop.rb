@@ -7,7 +7,10 @@ module Thaum
     module_function
 
     # Startup entry point. Blocks until app.quit is called. Returns nil.
-    def run(app:, tick: 0.1, threads: 4)
+    def run(app:, tick: 0.1, threads: 4, log: nil)
+      # Open the sink FIRST so it is live for all safe_invoke-wrapped work
+      # (mount, dispatch, render) that follows.
+      sink       = open_log_sink(log)
       terminal   = Terminal.new
       queue      = Thread::Queue.new
       capability = Color.detect(ENV)
@@ -37,6 +40,27 @@ module Thaum
       Thaum::Action.queue = nil
       Thaum::Action.pool  = nil
       terminal&.teardown
+      # Close the sink LAST so it stays live through teardown's
+      # safe_invoke-wrapped work.
+      close_log_sink(sink)
+    end
+
+    # Open the log sink and make it the active sink for the run. Returns nil
+    # (logging off) when no path is given. A bad path raises here — before
+    # terminal.setup, so it's a clean pre-raw-mode failure.
+    def open_log_sink(log)
+      return nil if log.nil?
+
+      sink = Log::FileSink.new(log).open
+      Log.sink = sink
+    end
+
+    # Close the sink and deactivate it. No-op when nil (logging was off).
+    def close_log_sink(sink)
+      return if sink.nil?
+
+      sink.close
+      Log.sink = nil
     end
 
     def event_loop(app:, queue:, terminal:, renderer:, cols:, rows:)
