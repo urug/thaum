@@ -9,6 +9,9 @@
 /test/version_tmp/
 /tmp/
 
+# Dev log console output (Thaum.log / examples default to thaum.log)
+*.log
+
 # Bundler
 /.bundle/
 /vendor/bundle
