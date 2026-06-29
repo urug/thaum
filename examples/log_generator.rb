@@ -82,4 +82,4 @@ class LogGeneratorApp
   end
 end
 
-Thaum.run(LogGeneratorApp.new, log: ARGV[0] || "thaum.log") if __FILE__ == $PROGRAM_NAME
+LogGeneratorApp.run(log: ARGV[0] || "thaum.log") if __FILE__ == $PROGRAM_NAME

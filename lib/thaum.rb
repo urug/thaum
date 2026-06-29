@@ -92,4 +92,27 @@ module Thaum
   def self.run(app, tick: 0.1, threads: 4, log: nil)
     RunLoop.run(app:, tick:, threads:, log:)
   end
+
+  # Quick-start: build an anonymous Thaum::App from the block body and run it,
+  # in place of defining a named class. The block is an ordinary class body —
+  # define `partition` and handlers with `def`:
+  #
+  #   Thaum.app do
+  #     def partition
+  #       vertical { region(height: :fill) { Thaum::Text.new(content: "Hello") } }
+  #     end
+  #
+  #     def on_key(event)
+  #       quit if event.key == :escape
+  #     end
+  #   end
+  #
+  # Forwards the same options as Thaum.run.
+  def self.app(**, &block)
+    raise ArgumentError, "Thaum.app requires a block" unless block
+
+    klass = Class.new { include App }
+    klass.class_eval(&block)
+    klass.run(**)
+  end
 end

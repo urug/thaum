@@ -87,4 +87,4 @@ class ProgressApp
   end
 end
 
-Thaum.run(ProgressApp.new)
+ProgressApp.run

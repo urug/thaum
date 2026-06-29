@@ -57,4 +57,4 @@ class MouseApp
   end
 end
 
-Thaum.run(MouseApp.new)
+MouseApp.run

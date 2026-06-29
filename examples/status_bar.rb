@@ -62,4 +62,4 @@ class StatusBarApp
   end
 end
 
-Thaum.run(StatusBarApp.new)
+StatusBarApp.run

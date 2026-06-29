@@ -98,4 +98,4 @@ class TextApp
   end
 end
 
-Thaum.run(TextApp.new)
+TextApp.run

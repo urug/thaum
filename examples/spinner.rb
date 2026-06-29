@@ -63,4 +63,4 @@ class SpinnerApp
   end
 end
 
-Thaum.run(SpinnerApp.new)
+SpinnerApp.run

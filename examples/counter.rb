@@ -47,4 +47,4 @@ class CounterApp
   end
 end
 
-Thaum.run(CounterApp.new)
+CounterApp.run
