@@ -81,4 +81,4 @@ class StopwatchApp
   end
 end
 
-Thaum.run(StopwatchApp.new, tick: 0.05)
+StopwatchApp.run(tick: 0.05)

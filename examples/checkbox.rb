@@ -86,4 +86,4 @@ class CheckboxApp
   end
 end
 
-Thaum.run(CheckboxApp.new)
+CheckboxApp.run

@@ -73,4 +73,4 @@ class ModalApp
   end
 end
 
-Thaum.run(ModalApp.new)
+ModalApp.run

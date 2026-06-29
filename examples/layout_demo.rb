@@ -135,4 +135,4 @@ class LayoutDemoApp
   end
 end
 
-Thaum.run(LayoutDemoApp.new)
+LayoutDemoApp.run

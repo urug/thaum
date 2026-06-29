@@ -109,4 +109,4 @@ class TabsApp
   end
 end
 
-Thaum.run(TabsApp.new)
+TabsApp.run

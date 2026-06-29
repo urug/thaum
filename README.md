@@ -46,7 +46,27 @@ Requires Ruby 3.2 or newer.
 
 ## Usage
 
-The `Hello World` example:
+The quickest start — `Thaum.app` builds and runs an app from a block, in place
+of defining a named class. The block is an ordinary class body:
+
+```ruby
+require "thaum"
+
+Thaum.app do
+  def partition
+    vertical do
+      region(height: :fill) { Thaum::Text.new(content: "Hello World!", align: :center) }
+    end
+  end
+
+  def on_key(event)
+    quit if event.key == :escape
+  end
+end
+```
+
+For a longer-lived app, define a class and start it with `.run`. `include
+Thaum::App` adds a `.run` class method:
 
 ```ruby
 require "thaum"
@@ -63,15 +83,14 @@ class HelloWorldApp
   end
 
   def partition
-    vertical do
-      region(height: :fill) { @greeting }
-    end
+    vertical { region(height: :fill) { @greeting } }
   end
 end
 
-Thaum.run(HelloWorldApp.new)
-
+HelloWorldApp.run
 ```
+
+`Thaum.run(app)` remains the primitive — use it directly when an app needs constructor arguments, e.g. `Thaum.run(LogReaderApp.new(path))`.
 
 ## Examples
 

@@ -239,4 +239,4 @@ class TodoApp
   end
 end
 
-Thaum.run(TodoApp.new)
+TodoApp.run

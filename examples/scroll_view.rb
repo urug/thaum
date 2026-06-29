@@ -61,4 +61,4 @@ class ScrollViewApp
   end
 end
 
-Thaum.run(ScrollViewApp.new)
+ScrollViewApp.run

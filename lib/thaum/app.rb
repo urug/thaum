@@ -8,6 +8,15 @@ module Thaum
     include Concerns::Modal
     include Concerns::TabNavigation
 
+    def self.included(base) = base.extend(ClassMethods)
+
+    # Class methods added on include.
+    module ClassMethods
+      # Build and run an instance: `SomeApp.run(log: "/path")`. Forwards the
+      # same options as Thaum.run.
+      def run(**) = Thaum.run(new, **)
+    end
+
     attr_reader :in_on_update, :modal_sigil, :modal_rect
 
     # --- Quit ---

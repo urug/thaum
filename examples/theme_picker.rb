@@ -92,4 +92,4 @@ class ThemePickerApp
   end
 end
 
-Thaum.run(ThemePickerApp.new)
+ThemePickerApp.run
